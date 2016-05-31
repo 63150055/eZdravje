@@ -45,7 +45,7 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Opis ideje, ki jo aplikacija podpira -->
-            <p>Aplikacija  »Moje telo« je namenjena pomoči pri nadzorovanju kilogramov. Uporabnik aplikacije bi enkrat tedensko vnašal podatke o svoji višini in teži, na poadlagi katerih bi aplikacija izračunala indeks telesne mase. Podatke o teži in indeksu telesne mase v odvisnosti od časa bi sprotno prikazovala z grafoma. To bi uporabniku nudilo pregleden prikaz stanja telesne teže na daljše časovno obdobje.  Aplikacija bi poleg grafičnega prikaza stanja nudila tudi zemljevid, na katerem bi glede na vnešeni naslov ali trenutno lokacijo prikazala vse športne ustanove, kar bi uporabniku omogočajo lažje načrtovanje vaj, saj bi lahko izbral ustanovo najbljižjo domu, šoli, službi... Aplikacija je torej namenjena namenjena posameznikom, ki želijo izgubiti, pridobiti ali pa le spremljati kilograme. Aplikacijo lahko uporabljajo tudi trenerji ali zdravniki, da spremljajo stanje stranke ali pacienta.</p>
+            <p>Aplikacija  »Moje telo« je namenjena pomoči pri nadzorovanju telesne teže, telesne višine in indeksa telesne mase. Uporabnik aplikacije je lahko posameznik, zdravnik, fitnes inštruktor ali kdorkoli, z namenom, da na enostaven in pregleden način slediti spremembam kilogramov ali višine merjenega telesa. Meritve lahko uporabnik vnaša tedensko, mesečno, letno ali celo tekom življenja, pri čimer bi še posebej do izraza prišlel graf višine v odvisnosti od časa. Ob prvi uporabi mora uporabnik najprej pridobiti svoj unikater EHR naslov. V zato namenjeno okno vnese svoje osnovne podatke, hkrati pa se opredeli tudi na način prehranjevanja. S tem podatkom aplikacija kasneje uporabniku prikazuje bolj prilagojeno vsebino na platformi Twitter.Uporabnik zatem v poljubnih časovnih intervalih preko svojega unikatnega EHR zapisa vnaša meritve.  Vnešene meritve so nato dostopne preko poizvedbe za določen EHR zapis. Ob vsaki zahtevi za poizvedbo, aplikacija izriše graf, ki predstavlja podatke iz poizvdbe v odvisnosti od časa, graf povprečnega indeksa telesne mase v Sloveniji (za ustrezen spol) in nad ustreznim stolpcom v grafu označi kam uporabnik trenutno spada. Uporabniku so na voljo tudi nekateri statistični podatki in prikaz platforme Twitter, ki uporabniku prikazuje najnovejše twitte na podlagi njegovih prehranskih navad in vrednosti  itm-ja.</p>
             <!-- KONEC: Opis ideje, ki jo aplikacija podpira -->
           </div>
         </div>
@@ -55,7 +55,8 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Uporabljeni zunanji viri podatkov -->
-            <p><strong>TO-DO</strong>: Na tem mestu je navesti zunanji vir podatkov (URL naslov), na kakšen način ste ga uporabili (neposredni API klic, uvožena statična datoteka ipd.) in kaj je bil namen uporabe (kako se vključuje v osnovno idejo aplikacije).</p>
+            <p>Kot zunanji vir podatkov sem v nalogi implementirala Twitter API. Del kode, ki omogoča vključitev Twitterja v aplikacijo, sem generirala v tonamenski funkcionalnosti te platforme. Koda je prilagojena za dane kriterije, način prikazovanja in stilsko obliko.</p>
+            <p>Zunanji vir glede na profil uporabnika ustrezno prikaze povezane Twitte. Kot profil uporabnika stejejo njegove prehranske navade in vrednost ITM-ja. Če je naš uporabnik vegan in ima previsok ITM, bi mu aplikacija prikazovala twitte na temo zdrave veganske prehrane in veganske diete. Povezava na zunanji vir: <a href="https://dev.twitter.com/overview/documentation">https://dev.twitter.com/overview/documentation</a></p>
             <!-- KONEC: Uporabljeni zunanji viri podatkov -->
           </div>
         </div>

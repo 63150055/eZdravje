@@ -150,6 +150,7 @@ function dodajMeritveVitalnihZnakov() {
 		    templateId: 'Vital Signs',
 		    format: 'FLAT',
 		};
+
 		$.ajax({
 		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
 		    type: 'POST',
@@ -588,7 +589,7 @@ var izracunStatistike = function(rojstvo,visine,teze,datumi,prehrana,dolzina_pod
                     <tr><td>ITM od zadnje spremembe</td><td class='text-right'>"+Math.round(ITM_od_zadnje_spremembe* 100) / 100+"</td>\
                     <tr><td>Najnizji ITM</td><td class='text-right'>"+Math.round(min_itm* 100) / 100+"</td>\
                     <tr><td>Najvisji ITM</td><td class='text-right'>"+Math.round(max_itm* 100) / 100+"</td>\
-                    <tr><td>Razlika od zacetne teze</td><td class='text-right'>"+kg_od_prve_meritve+" kg</td>\
+                    <tr><td>Razlika od zacetne teze</td><td class='text-right'>"+Math.round(kg_od_prve_meritve* 100) / 100+" kg</td>\
                     </table>";
                     
                     
@@ -601,18 +602,15 @@ var twitterPrikaz = function(prehrana,itm){
 	//ce je itm uredu- nekaj za ohranjanje...
 	var parametri="#vegan";
 
-     
 
-	var twiter = "<a class='twitter-timeline'  href='https://twitter.com/search?q=%23vegan%20%23food%20%23healthy' data-widget-id='737304951437840384'>Tweets about #vegan#food#healthy</a>\
+
+	var twiter = "<a class='twitter-timeline' data-dnt='true' href='https://twitter.com/search?q=%23vegan%20%23food%20%23healthy' data-widget-id='737662572871200768'>Tweets about #vegan#food#healthy</a>\
 									<script>\
 										!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';\
 											if(!d.getElementById(id))\
 												{\
 													js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);\
 												}\
-											else{\
-												js='error';\
-											}\
 										}\
 										(document,'script','twitter-wjs');\
 										</script>";
@@ -624,25 +622,74 @@ var twitterPrikaz = function(prehrana,itm){
 	
 }
 
-var generirajPodatke=function(){
+var generirajPodatke=function(zahteva){
 	console.log("TUKAJ BOM GENERIRAL");
-	//genereraj osebe da dobis ehr!
+	
+	var ehr_id="";
+	var ime="";
+	var priimek="";
+	var rojstvo="";
+	var prehrana="";
+	var teze[];
+	var visine[];
+	var datumi[];
+	
+	
+	if(zahteva==1){
+		ime="Bojan";
+		priimek="Novak";
+		rojstvo="1981-10-30T14:58";
+		prehrana="vegi";
+		teze=[101,101.5,101.2.100,99,98,99];
+		visine=[185,185,185.1,185.1,185.2,185,2,185.2];
+		datumi=["1981-10-30T14:58,"1981-10-30T14:58,"1981-10-30T14:58,"2014-11-03T14:58","2015-02-03T14:58","2015-01-01T14:58"];
+		
+	}
+	else if(zahteva==2){
+		
+	}
+	else if(zahteva==3){
+		
+	}
+	
+	//var ehr_prvi=$("#preberiEHRid").val();
+	
+	var teze_bojan=["1","2","3","4","5"];
+	var datumi_bojan=["1938-11-30T14:58","1938-10-20T14:58","1918-10-30T14:58","1138-10-30T14:58","2938-10-30T14:58"];
+	var visine_bojan=["10","11","12","13","14"];
+	//var ehr_prvi=ustvariBolnika("Bojan","Novak","MALE","vegi","1981-2-10",datumi_bojan,visine_bojan,teze_bojan,12);
+	//console.log("bojan: "+ehr_prvi);
+	//dodajMeritve("d93ab36d-1ef1-4635-851b-16ff9708c9ff",datumi_bojan,visine_bojan,teze_bojan);
+	
+	for(var i = 0; i < 5; i++){
+		dodajMeritve("d018bafb-9df4-4d9d-852b-390ccac6d41f",datumi_bojan[i],visine_bojan[i],teze_bojan[i]);
+	}
+
+	//console.log("bojan: "+ehr_prvi);
+	//ustvariBolnika(ime,priimek,spol,prehrana,datum);
+	//ustvariBolnika(ime,priimek,spol,prehrana,datum);
+	
+}
+
+var ustvariBolnika=function(ime,priimek,spol,prehrana,datum,datumInUra,telesnaVisina,telesnaTeza,dolzina_podatkov){
+	var vrni_ehr;
 	sessionId = getSessionId();
 	$.ajaxSetup({
 		    headers: {"Ehr-Session": sessionId}
 		});
-		$.ajax({
+		var response=$.ajax({
 		    url: baseUrl + "/ehr",
 		    type: 'POST',
 		    success: function (data) {
 		        var ehrId = data.ehrId;
+		        vrni_ehr=ehrId;
 		        console.log("moj EHR: "+ehrId);
 		        var partyData = {
-		        	gender:"FEMALE",
-		            firstNames: "Blazka",
-		            lastNames: "Blatnik",
-		            dateOfBirth: "1996-2-10",
-		            partyAdditionalInfo: [{key: "ehrId", value: ehrId},{key: "prehrana", value: "Mesojedec"}]
+		        	gender:spol,
+		            firstNames: ime,
+		            lastNames: priimek,
+		            dateOfBirth: datum,
+		            partyAdditionalInfo: [{key: "ehrId", value: ehrId},{key: "prehrana", value: prehrana}]
 		        };
 		        $.ajax({
 		            url: baseUrl + "/demographics/party",
@@ -651,12 +698,81 @@ var generirajPodatke=function(){
 		            data: JSON.stringify(partyData),
 		            success: function (party) {
 		                if (party.action == 'CREATE') {
-		                    $("#preberiEHRid").val(ehrId);
+		                	 $("#preberiEHRid").val(ehrId);
+		                	 $("#mojEhrID").val(ehrId);
+		                	 console.log(ehrId);
+
 		                }
 		            },
 		        });
+		        
+		        console.log("prej: "+datumInUra[i]+telesnaVisina[i]+telesnaTeza[i]);
+		        for(var i=0; i < dolzina_podatkov;i++){
+		        	console.log("sem v zanki: "+datumInUra[i]+telesnaVisina[i]+telesnaTeza[i]);
+					var podatki = {
+					// Struktura predloge je na voljo na naslednjem spletnem naslovu:
+				    // https://rest.ehrscape.com/rest/v1/template/Vital%20Signs/example
+					    "ctx/language": "en",
+					    "ctx/territory": "SI",
+					    "ctx/time": datumInUra[i],
+					    "vital_signs/height_length/any_event/body_height_length": telesnaVisina[i],
+					    "vital_signs/body_weight/any_event/body_weight": telesnaTeza[i],
+					};
+					var parametriZahteve = {
+					    ehrId: ehrId,
+					    templateId: 'Vital Signs',
+					    format: 'FLAT',
+					};
+			
+					$.ajax({
+					    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+					    type: 'POST',
+					    contentType: 'application/json',
+					    data: JSON.stringify(podatki),
+					    success: function (res) {},
+					    error: function(err) {}
+					});
+		        }
+		        
 		    }
+		    
 		});
+		console.log("ehr na koncu: "+response.ehrId );
+		return response.ehrId;
+	//console.log("ehr na koncu: "+vrni_ehr );
+	//return response.responseJSON.sessionId;
+}
+
+
+var dodajMeritve = function(ehrId,datumInUra,telesnaVisina,telesnaTeza){
+	//console.log("sem tu notri: "+datumInUra+telesnaVisina+telesnaTeza);
 	
+	sessionId = getSessionId();
+		$.ajaxSetup({
+		    headers: {"Ehr-Session": sessionId}
+		});
+	    	console.log("sem v zanki: ");
+			var podatki = {
+			// Struktura predloge je na voljo na naslednjem spletnem naslovu:
+		    // https://rest.ehrscape.com/rest/v1/template/Vital%20Signs/example
+			    "ctx/language": "en",
+			    "ctx/territory": "SI",
+			    "ctx/time": datumInUra,
+			    "vital_signs/height_length/any_event/body_height_length": telesnaVisina,
+			    "vital_signs/body_weight/any_event/body_weight": telesnaTeza,
+			};
+			var parametriZahteve = {
+			    ehrId: ehrId,
+			    templateId: 'Vital Signs',
+			    format: 'FLAT',
+			};
 	
+			$.ajax({
+			    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+			    type: 'POST',
+			    contentType: 'application/json',
+			    data: JSON.stringify(podatki),
+			    success: function (res) {},
+			    error: function(err) {}
+			});
 }
