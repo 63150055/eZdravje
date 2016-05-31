@@ -4,7 +4,6 @@ var queryUrl = baseUrl + '/query';
 var username = "ois.seminar";
 var password = "ois4fri";
 
-
 /**
  * Prijava v sistem z privzetim uporabnikom za predmet OIS in pridobitev
  * enolične ID številke za dostop do funkcionalnosti
@@ -55,7 +54,7 @@ function kreirajEHRzaBolnika() {
 		            firstNames: ime,
 		            lastNames: priimek,
 		            dateOfBirth: datumRojstva,
-		            partyAdditionalInfo: [{key: "ehrId", value: ehrId},{key: "prehrana", value: "test"}]
+		            partyAdditionalInfo: [{key: "ehrId", value: ehrId},{key: "prehrana", value: prehrana}]
 		        };
 		        $.ajax({
 		            url: baseUrl + "/demographics/party",
@@ -85,7 +84,7 @@ function kreirajEHRzaBolnika() {
 /**
  * Za podan EHR ID preberi demografske podrobnosti pacienta in izpiši sporočilo
  * s pridobljenimi podatki (ime, priimek in datum rojstva).
- */
+ 
 function preberiEHRodBolnika() {
 	sessionId = getSessionId();
 
@@ -114,7 +113,7 @@ function preberiEHRodBolnika() {
 		});
 	}
 }
-
+*/
 
 /**
  * Za dodajanje vitalnih znakov pacienta je pripravljena kompozicija, ki
@@ -195,16 +194,17 @@ function preberiMeritveVitalnihZnakov() {
 				var party = data.party;
 				var spol = party.gender;
 				var rojstvo = party.dateOfBirth;
-				var visine=[];
-                var datumi=[];
-                var teze = [];
-                var dolzine;
+				//var visine=[];
+                //var datumi=[];
+                //var teze = [];
+                //var dolzine;
+                //var itm;
                 var prehrana= party.partyAdditionalInfo[1].value;
 				$("#rezultatMeritveVitalnihZnakov").html("<br/><span>Pridobivanje " +
           "podatkov za <b>'" + tip + "'</b> bolnika <b>'" + party.firstNames +
           " " + party.lastNames + "'</b>.</span><br/><br/>");
 //////////////////////////za izracun statistike
-				console.log("prej:"+visine+teze);
+				//console.log("prej:"+visine+teze);
 					$.ajax({
   					    url: baseUrl + "/view/" + ehrId + "/" + "height",
 					    type: 'GET',
@@ -214,6 +214,9 @@ function preberiMeritveVitalnihZnakov() {
                 			var datumi=[];
                 			var teze = [];
                 			var dolzine;
+                			var graf_visina=false;
+                			var graf_teza=false;
+                			var zenska = false;
 					    	if (res.length > 0) {
 						        for (var i in res) {
                           			visine.push(res[i].height);
@@ -232,7 +235,11 @@ function preberiMeritveVitalnihZnakov() {
 	                          			console.log("teze: "+res[i].weight);
 							        }
 						    	}
-						    	izracunStatistike(rojstvo,visine,teze,datumi,prehrana,dolzine);
+						    	if(tip=="telesna visina")graf_visina=true;
+						    	else graf_teza=true;
+						    	if(spol=="FEMALE")zenska=true;
+						    	var itm = izracunStatistike(rojstvo,visine,teze,datumi,prehrana,dolzine);
+						    	narisiGrafe(visine,teze,datumi,res.length,zenska,graf_visina,graf_teza,itm);
 						    }
 						    
 							});} 
@@ -249,16 +256,17 @@ function preberiMeritveVitalnihZnakov() {
 						    	var results = "<table class='table table-striped " +
                     "table-hover'><tr><th>Datum in ura</th>" +
                     "<th class='text-right'>Telesna visina</th></tr>";
-                    			var zenska=false;
+                    			//var zenska=false;
 						        for (var i in res) {
 						            results += "<tr><td>" + res[i].time +
                           "</td><td class='text-right'>" + res[i].height +
                           " " + res[i].unit + "</td>";
-                          			visine.push(res[i].height);
-									datumi.push(res[i].time);
+                          			//visine.push(res[i].height);
+									//datumi.push(res[i].time);
 									if(spol=="FEMALE")zenska=true;
 						        }
-						        narisiGrafe(visine,false,datumi,res.length,zenska);
+						        //console.log("tu bom dal"+itm)
+						        //narisiGrafe(visine,false,datumi,res.length,zenska);
 						        results += "</table>";
 						        $("#rezultatMeritveVitalnihZnakov").append(results);
 					    	} else {
@@ -283,17 +291,17 @@ function preberiMeritveVitalnihZnakov() {
 						    	var results = "<table class='table table-striped " +
                     "table-hover'><tr><th>Datum in ura</th>" +
                     "<th class='text-right'>Telesna teža</th></tr>";
-                    			var zenska=false;
+                    			//var zenska=false;
 						        for (var i in res) {
 						            results += "<tr><td>" + res[i].time +
                           "</td><td class='text-right'>" + res[i].weight + " " 	+
                           res[i].unit + "</td>";
-                          			teze.push(res[i].weight);
-									datumi.push(res[i].time);
-									console.log()
-									if(spol=="FEMALE")zenska=true;
+                          			//teze.push(res[i].weight);
+									//datumi.push(res[i].time);
+									//console.log()
+									//if(spol=="FEMALE")zenska=true;
 						        }
-                    			narisiGrafe(false,teze,datumi,res.length,zenska);
+                    			//narisiGrafe(false,teze,datumi,res.length,zenska);
 						        results += "</table>";
 						        $("#rezultatMeritveVitalnihZnakov").append(results);
 					    	} else {
@@ -332,9 +340,11 @@ $(document).ready(function() {
   $('#preberiPredlogoBolnika').change(function() {
     $("#kreirajSporocilo").html("");
     var podatki = $(this).val().split(",");
-    $("#kreirajIme").val(podatki[0]);
-    $("#kreirajPriimek").val(podatki[1]);
-    $("#kreirajDatumRojstva").val(podatki[2]);
+    $("#kreirajSpol").val(podatki[1]);
+    $("#kreirajPrehranskeNavade").val(podatki[0]);
+    $("#kreirajIme").val(podatki[2]);
+    $("#kreirajPriimek").val(podatki[3]);
+    $("#kreirajDatumRojstva").val(podatki[4]);
   });
 
   /**
@@ -360,11 +370,7 @@ $(document).ready(function() {
 		$("#dodajVitalnoDatumInUra").val(podatki[1]);
 		$("#dodajVitalnoTelesnaVisina").val(podatki[2]);
 		$("#dodajVitalnoTelesnaTeza").val(podatki[3]);
-		$("#dodajVitalnoTelesnaTemperatura").val(podatki[4]);
-		$("#dodajVitalnoKrvniTlakSistolicni").val(podatki[5]);
-		$("#dodajVitalnoKrvniTlakDiastolicni").val(podatki[6]);
-		$("#dodajVitalnoNasicenostKrviSKisikom").val(podatki[7]);
-		$("#dodajVitalnoMerilec").val(podatki[8]);
+
 	});
 
   /**
@@ -381,12 +387,11 @@ $(document).ready(function() {
 });
 
 // --- GRAF ---
-var narisiGrafe = function (visine,teze,datumi,dolzina_podatkov,zenska) {
-		console.log("bil sem klican");
+var narisiGrafe = function (visine,teze,datumi,dolzina_podatkov,zenska,graf_visina,graf_teza,itm) {
 		var graf_1=[];
 		var naslov="";
 		var opis="";
-		if(visine==false){
+		if(graf_visina==false){
 			naslov="Telesna teza";
 			opis="Teza v kilogramih";
 			for(var i = 0; i < dolzina_podatkov;i++){
@@ -449,25 +454,35 @@ var narisiGrafe = function (visine,teze,datumi,dolzina_podatkov,zenska) {
 			],
 		});
 		chart.render();
-		console.log(zenska);
+
+		var podhr="";
+		var normalno="";
+		var srednje="";
+		var debeli="";
+		if(itm<=18.49){podhr="X";}
+		else if(itm<=24.99){normalno="X";}
+		else if(itm<=29.99)srednje="X";
+		else if(itm>=30)debeli="X";
+		console.log(itm);
 		if(zenska==true){
 			var naslov="Povprecni ITM v Sloveniji (zenske)"
 			var graf_2=[
-				{ y: 4, label: "Podhranjeni", color: "#6A5ACD"},
-		        { y: 53,  label: "Normalno prehranjeni" ,color: "#006400"},
-		        { y: 30,  label: "Prekomerno telesno tezki" ,color: "#e6c300"},
-		        { y: 15.4,  label: "Debeli" ,color: "#800000"},
+				{ y: 4, label: "Podhranjeni", color: "#6A5ACD",indexLabel: podhr },
+		        { y: 53,  label: "Normalno prehranjeni" ,color: "#006400",indexLabel: normalno },
+		        { y: 30,  label: "Prekomerno telesno tezki" ,color: "#e6c300",indexLabel: srednje },
+		        { y: 15.4,  label: "Debeli" ,color: "#800000",indexLabel: debeli },
 				];
 			
 			
 		}
 		else{
+
 			var naslov="Povprecni ITM v Sloveniji (moski)"
 			var graf_2=[
-				{ y: 1.5, label: "Podhranjeni", color: "#6A5ACD",indexLabel: "high" },
-		        { y: 35,  label: "Normalno prehranjeni" ,color: "#006400",indexLabel: "high" },
-		        { y: 48,  label: "Prekomerno tezki" ,color: "#e6c300",indexLabel: "high" },
-		        { y: 17,  label: "Debeli" ,color: "#800000",indexLabel: "high" },
+				{ y: 1.5, label: "Podhranjeni", color: "#6A5ACD",indexLabel: podhr },
+		        { y: 35,  label: "Normalno prehranjeni" ,color: "#006400",indexLabel: normalno },
+		        { y: 48,  label: "Prekomerno tezki" ,color: "#e6c300",indexLabel: srednje },
+		        { y: 17,  label: "Debeli" ,color: "#800000",indexLabel: debeli },
 				];
 		}
 		var chart = new CanvasJS.Chart("grafITM",
@@ -535,7 +550,7 @@ var izracunStatistike = function(rojstvo,visine,teze,datumi,prehrana,dolzina_pod
 	else if(ITM_od_zadnje_spremembe>=40.0){ocena = "<ul class='list-group'><li class='list-group-item list-group-item-danger'>Vas ITM je ogrozujoce visok. <b class='text-right'>Kategorija: Debelost stopnje III</b></li></ul>";itm_stopnja=7;}
 
 	//IZRACUN STAROSTI
-	
+	itm_seje=ITM_od_zadnje_spremembe;
 	
 	//KLIC TWITERJA
 	twitterPrikaz(prehrana,itm_stopnja);
@@ -552,7 +567,7 @@ var izracunStatistike = function(rojstvo,visine,teze,datumi,prehrana,dolzina_pod
 	var max=teze[0]/((visine[0]/100)*(visine[0]/100));
 	for(var i = 0; i < dolzina_podatkov; i++){
 		var itm = teze[i]/((visine[i]/100)*(visine[i]/100));
-		if(itm>min)min=itm;
+		if(itm>max)max=itm;
 	}
 	max_itm=max;
 	
@@ -578,7 +593,7 @@ var izracunStatistike = function(rojstvo,visine,teze,datumi,prehrana,dolzina_pod
                     
                     
 	$("#rezultatStatistike").append(results);                
-                    
+    return ITM_od_zadnje_spremembe;                
 }
 
 var twitterPrikaz = function(prehrana,itm){
@@ -606,5 +621,42 @@ var twitterPrikaz = function(prehrana,itm){
 	
 	
 	$("#twitter").append(twiter); 
+	
+}
+
+var generirajPodatke=function(){
+	console.log("TUKAJ BOM GENERIRAL");
+	//genereraj osebe da dobis ehr!
+	sessionId = getSessionId();
+	$.ajaxSetup({
+		    headers: {"Ehr-Session": sessionId}
+		});
+		$.ajax({
+		    url: baseUrl + "/ehr",
+		    type: 'POST',
+		    success: function (data) {
+		        var ehrId = data.ehrId;
+		        console.log("moj EHR: "+ehrId);
+		        var partyData = {
+		        	gender:"FEMALE",
+		            firstNames: "Blazka",
+		            lastNames: "Blatnik",
+		            dateOfBirth: "1996-2-10",
+		            partyAdditionalInfo: [{key: "ehrId", value: ehrId},{key: "prehrana", value: "Mesojedec"}]
+		        };
+		        $.ajax({
+		            url: baseUrl + "/demographics/party",
+		            type: 'POST',
+		            contentType: 'application/json',
+		            data: JSON.stringify(partyData),
+		            success: function (party) {
+		                if (party.action == 'CREATE') {
+		                    $("#preberiEHRid").val(ehrId);
+		                }
+		            },
+		        });
+		    }
+		});
+	
 	
 }
