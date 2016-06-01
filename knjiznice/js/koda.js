@@ -256,6 +256,7 @@ function preberiMeritveVitalnihZnakov() {
 						    	console.log("moja prehrana"+prehrana);
 						    	var itm = izracunStatistike(rojstvo,visine,teze,datumi,prehrana,dolzine);
 						    	narisiGrafe(visine,teze,datumi,res.length,zenska,graf_visina,graf_teza,itm);
+						    	
 						    }
 						    
 							});} 
@@ -540,6 +541,7 @@ var narisiGrafe = function (visine,teze,datumi,dolzina_podatkov,zenska,graf_visi
 		});
 
 chart.render();
+twttr.widgets.load();
 }
 
 var izracunStatistike = function(rojstvo,visine,teze,datumi,prehrana,dolzina_podatkov){
