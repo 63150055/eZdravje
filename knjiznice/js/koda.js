@@ -123,7 +123,7 @@ function preberiEHRodBolnika() {
  */
 function dodajMeritveVitalnihZnakov() {
 	sessionId = getSessionId();
-
+	
 	var ehrId = $("#dodajVitalnoEHR").val();
 	var datumInUra = $("#dodajVitalnoDatumInUra").val();
 	var telesnaVisina = $("#dodajVitalnoTelesnaVisina").val();
@@ -180,6 +180,8 @@ function dodajMeritveVitalnihZnakov() {
 function preberiMeritveVitalnihZnakov() {
 	sessionId = getSessionId();
 
+	//twttr.widgets.load();
+	
 	var ehrId = $("#meritveVitalnihZnakovEHRid").val();
 	var tip = $("#preberiTipZaVitalneZnake").val();
 
@@ -607,44 +609,61 @@ var twitterPrikaz = function(prehrana,itm){
 	var twiter="";
 	if(prehrana=="meso"){
 		if(itm<=2){
-			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23weightgain%20%23nutrition" data-widget-id="738018156715900928">Tweets about #weightgain #nutrition</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23weightgain%20%23nutrition" data-widget-id="738018156715900928">Tweets about #weightgain #nutrition</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		}
 		else if(itm==3){
-			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23StayFit%20%23EatHealthy" data-widget-id="738002222705987585">Tweets about #StayFit #EatHealthy</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23StayFit%20%23EatHealthy" data-widget-id="738002222705987585">Tweets about #StayFit #EatHealthy</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		}
 		else{
-			twiter='<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=%23weightloss%20%23diet%20" data-widget-id="738002769882255360">Tweets about #weightloss #diet </a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+			twiter='<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=%23weightloss%20%23diet%20" data-widget-id="738002769882255360">Tweets about #weightloss #diet </a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		}
 	}
 	else if(prehrana=="vegi"){
 		if(itm<=2){
-			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegetarian%20%23fit" data-widget-id="738003763521327104">Tweets about #vegetarian #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegetarian%20%23fit" data-widget-id="738003763521327104">Tweets about #vegetarian #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		}
 		else if(itm==3){
-			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegetarian%20%23fit" data-widget-id="738003763521327104">Tweets about #vegetarian #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegetarian%20%23fit" data-widget-id="738003763521327104">Tweets about #vegetarian #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		}
 		else{
-			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegetarian%20%23diet" data-widget-id="738004184428126209">Tweets about #vegetarian #diet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegetarian%20%23diet" data-widget-id="738004184428126209">Tweets about #vegetarian #diet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		}
 	} 
 	else if(prehrana=="vegan"){
 		if(itm<=2){
 			console.log("v prvem");
-			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegan%20%23fit" data-widget-id="738004490083807232">Tweets about #vegan #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegan%20%23fit" data-widget-id="738004490083807232">Tweets about #vegan #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		}
 		else if(itm==3){
 			console.log("v drugem");
-			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegan%20%23fit" data-widget-id="738004490083807232">Tweets about #vegan #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegan%20%23fit" data-widget-id="738004490083807232">Tweets about #vegan #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		}
 		else{
-			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegan%20%23diet" data-widget-id="738005163559014400">Tweets about #vegan #diet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegan%20%23diet" data-widget-id="738005163559014400">Tweets about #vegan #diet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		}
 	}
 
 	
 
-	$("#twitter").append(twiter); 
+	$("#twitter").append(twiter);
+	//$('#twitter').load("index.html" +  ' #twitter');
+
+	//twttr.widgets.load( $("#twitter")[0] );
+	//twttr.widgets.load();
+    //$(document).load();  
+
 	
+	//$('#twitter').load('index.html #twitter');
+	//var page_url="https://e-zdravje-a63150055.c9users.io/index.html#";
+	//console.log(page_url);
+	//$('#twitter').load(page_url + ' #twitter');
+	//$("#twitter").load(); 
+	//twttr.widgets.load();
+	/*
+	$(document).ready(function() { 
+      twttr.widgets.load();  
+	});
+	*/
 }
 
 var generirajPodatke = function(){
