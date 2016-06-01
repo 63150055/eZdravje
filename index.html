@@ -12,9 +12,6 @@
   <script src="knjiznice/js/koda.js"></script>
   <meta http-equiv="Content-Type" content="text/html charset=UTF-8"/>
 	<script src="knjiznice/js/jquery-2.2.3.min.js"></script>
-	<link href="knjiznice/css/bootstrap.min.css" rel="stylesheet">
-	<script src="knjiznice/js/bootstrap.min.js"></script>
-	<script src="demo.js"></script>
 	<script type="text/javascript" src="knjiznice/js/canvasjs.min.js"></script>
 	<style>
 		body {padding: 10px;}
@@ -51,14 +48,13 @@
 
   <!-- ZAČETEK: Vsebina aplikacije -->
   <div class="container">
-    <div class="page-header"><h2>Vnos in poizvedovanje po EHR podatkih</h2></div>
+    <div class="page-header"><h2>Vnos in poizvedovanje po EHR podatkih</h2><div id = "sporociloGen"></div></div>
 		<div class="row">
 			<div class="col-lg-6 col-md-6 col-sm-6">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<div class="row">
 							<div class="col-lg-8 col-md-8 col-sm-8"><b>Kreiranje novega EHR zapisa</b></div>
-							<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="preberiPredlogoBolnika"><option id="mojEhrID" value="">prosim delaj</option><option value="Pujsa,Pepa,1938-10-30T14:58">Pujsa Pepa</option></select></div>
 						</div>
 					</div>
 					<div class="panel-body">
@@ -90,7 +86,6 @@
 					<div class="panel-heading">
 						<div class="row">
 							<div class="col-lg-8 col-md-8 col-sm-8"><b>Vnos vitalnih znakov</b></div>
-							<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="preberiObstojeciVitalniZnak"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02|2014-11-21T11:40Z|185|80.0|36.50|118|92|98|medicinska sestra Smrketa">Ata Smrk</option></select></div>
 						</div>
 					</div>
 					<div class="panel-body">
@@ -109,7 +104,7 @@
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-6"><b>Pregled vitalnih znakov</b></div>
 						<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiTipZaVitalneZnake"><option value="telesna visina">telesna visina</option><option value="telesna teža">telesna teža</option></select></div>
-						<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiEhrIdZaVitalneZnake"><option value=""></option><option value="0c6ec0a8-dfc1-4d8a-af84-78a220c2864f">Fit Veganic</option></select></div>
+						<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiEhrIdZaVitalneZnake"></select></div>
 					</div>
 				</div>
 				<div class="panel-body">

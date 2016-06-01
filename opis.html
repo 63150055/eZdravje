@@ -56,7 +56,9 @@
           <div class="panel-body">
             <!-- ZAČETEK: Uporabljeni zunanji viri podatkov -->
             <p>Kot zunanji vir podatkov sem v nalogi implementirala Twitter API. Del kode, ki omogoča vključitev Twitterja v aplikacijo, sem generirala v tonamenski funkcionalnosti te platforme. Koda je prilagojena za dane kriterije, način prikazovanja in stilsko obliko.</p>
-            <p>Zunanji vir glede na profil uporabnika ustrezno prikaze povezane Twitte. Kot profil uporabnika stejejo njegove prehranske navade in vrednost ITM-ja. Če je naš uporabnik vegan in ima previsok ITM, bi mu aplikacija prikazovala twitte na temo zdrave veganske prehrane in veganske diete. Povezava na zunanji vir: <a href="https://dev.twitter.com/overview/documentation">https://dev.twitter.com/overview/documentation</a></p>
+            <p>Zunanji vir glede na profil uporabnika ustrezno prikaze povezane Twitte. Kot profil uporabnika stejejo njegove prehranske navade in vrednost ITM-ja. Če je naš uporabnik vegan in ima previsok ITM, bi mu aplikacija prikazovala twitte na temo zdrave veganske prehrane in veganske diete. Za iskanje povezanih twittov se uporablja iskanje po "tagih" oziroma oznakah - "#". V nekaterih primerih so iskane oznake prilagojene in odstopajo od idealnih, saj iskanje s preveč oznakami ne pripelje do širših in raznolikih zadetkov. \
+            Povezava na zunanji vir: <a href="https://dev.twitter.com/overview/documentation">https://dev.twitter.com/overview/documentation</a></p>
+            <p><b>Pri uporabi brskalnika Mozila Firefox je potrebno ročno izključiti sledenje (siva ikona poleg url naslova).</b></p>
             <!-- KONEC: Uporabljeni zunanji viri podatkov -->
           </div>
         </div>
@@ -66,7 +68,7 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Master/detail načrtovalski vzorec -->
-            <p><strong>TO-DO</strong>: Na tem mestu morate navesti uporabljen master/detail načrtovalski vzorec in na kakšen način ga nameravate uporabiti.</p>
+            <p>Master/detail načrtovalski vzorec v moji aplikaciji prikazuje vse vnešene telesne višine ali telesne kilograme (odvisno od uporabnikove izbire), urejene po datumu. Podatki prikazani s tem načrtovalskim vzorecem, se nato prikažejo še v grafu. Graf je prilagojen izbiri odvisne komponente (detail), zato se ustrezno prilagodi naslov in prikaz grafa, če uporabnik izbere drugo odvisno komponento. Na podalgi podatkov "telesna višina" in "telesna dolžina" se izračunajo tudi statistični podatki./</p>
             <!-- KONEC: Master/detail načrtovalski vzorec -->
           </div>
         </div>
@@ -76,7 +78,7 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Uporabljeni zunanji viri podatkov -->
-            <p><strong>TO-DO</strong>: Na tem mestu je potrebno navesti uporabljeno tehniko vizualizacije podatkov (za pomoč lahko uporabite primer iz <a href="https://github.com/mbostock/d3/wiki/Gallery" target="_blank">D3.js galerije</a>) in zakaj je bila ta tehnika izbrana.</p>
+            <p>Podatke sem vizualizirala s pomočjo dveh grafov in dveh tabel. V prvi tabeli se ob kliku na gum "Preberi meritve vitalnih znakov" izpišeta neodvisen podatek (ura) in odvisen podatek (telesna višina ali telesna teža). V drugi tabeli se izpišejo izračunani statistični podatki, nad tabelo pa se v oknu izpiše kratek "opis" našega trenutnega stanja, barva okna pa je prilagojena "resnosti" uporabnikovega ITM-ja. V dveh grafih med tabelama se prikažejo podatki iz prve tabele, in fiksni podatki o <a href="http://www.stat.si/doc/pub/Zdravje%20in%20zdravstveno%20varstvo-slo.pdf">statistiki ITM-ja med Slovenci</a> (str 51). Prvi graf je, kot že rečeno, odvisen od izbrane komponente. Drgi graf je odvisen od spola uporabnika. Če je uporabnik moški, mu izriše graf statistike za moške v Sloveniji, nad ustrezen stolpec pa izriše znak "X", ki označuje v kateri del povprečja uporabnik trenutno spada. Grafa sem narisala s pomočjo canvas JS. </p>
             <!-- KONEC: Uporabljeni zunanji viri podatkov -->
           </div>
         </div>

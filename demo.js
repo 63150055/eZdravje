@@ -33,7 +33,7 @@ function kreirajEHRzaBolnika() {
 	var datumRojstva = $("#kreirajDatumRojstva").val();
 	var spol = $("#kreirajSpol").val();
 	var prehrana=$("#kreirajPrehranskeNavade").val();
-	console.log("prehrana ena "+prehrana);
+	console.log("v kreiraj ehr: "+prehrana);
 	
 	if (!spol || !ime || !priimek || !datumRojstva || ime.trim().length == 0 ||
       priimek.trim().length == 0 || datumRojstva.trim().length == 0 || spol.trim().length == 0) {
@@ -200,7 +200,19 @@ function preberiMeritveVitalnihZnakov() {
                 //var teze = [];
                 //var dolzine;
                 //var itm;
-                var prehrana= party.partyAdditionalInfo[1].value;
+                var prehrana="";
+                
+                console.log("v preberi meritve: "+ prehrana);
+
+                for (var j = 0; j < 2; j++){
+                    if(party.partyAdditionalInfo[j].key=="prehrana"){
+                    	prehrana = party.partyAdditionalInfo[j].value;
+                    	break;
+                    }
+                }
+                
+
+                console.log("vrednost naprej"+party.partyAdditionalInfo[1].value);
 				$("#rezultatMeritveVitalnihZnakov").html("<br/><span>Pridobivanje " +
           "podatkov za <b>'" + tip + "'</b> bolnika <b>'" + party.firstNames +
           " " + party.lastNames + "'</b>.</span><br/><br/>");
@@ -239,6 +251,7 @@ function preberiMeritveVitalnihZnakov() {
 						    	if(tip=="telesna visina")graf_visina=true;
 						    	else graf_teza=true;
 						    	if(spol=="FEMALE")zenska=true;
+						    	console.log("moja prehrana"+prehrana);
 						    	var itm = izracunStatistike(rojstvo,visine,teze,datumi,prehrana,dolzine);
 						    	narisiGrafe(visine,teze,datumi,res.length,zenska,graf_visina,graf_teza,itm);
 						    }
@@ -341,8 +354,8 @@ $(document).ready(function() {
   $('#preberiPredlogoBolnika').change(function() {
     $("#kreirajSporocilo").html("");
     var podatki = $(this).val().split(",");
-    $("#kreirajSpol").val(podatki[1]);
-    $("#kreirajPrehranskeNavade").val(podatki[0]);
+    $("#kreirajSpol").val(podatki[0]);
+    $("#kreirajPrehranskeNavade").val(podatki[1]);
     $("#kreirajIme").val(podatki[2]);
     $("#kreirajPriimek").val(podatki[3]);
     $("#kreirajDatumRojstva").val(podatki[4]);
@@ -536,10 +549,8 @@ var izracunStatistike = function(rojstvo,visine,teze,datumi,prehrana,dolzina_pod
 	var starost;
 	var itm_stopnja;
 	
-	console.log(teze[dolzina_podatkov-1]+" "+visine[dolzina_podatkov-1]);
 	//izracun itmja (zadnji vnos)
 	ITM_od_zadnje_spremembe = teze[0]/(((visine[0])/100)*((visine[0])/100));
-	console.log("itm: "+ITM_od_zadnje_spremembe);
 	//stopnja itmja!
 	if(ITM_od_zadnje_spremembe<16,0){ocena = "<ul class='list-group'><li class='list-group-item list-group-item-danger'>Vas ITM je ogrozujoce nizek. <b class='text-right'>Kategorija: Huda nedohranjenost</b></li></ul>";itm_stopnja=0;}
 	else if(ITM_od_zadnje_spremembe<17.0){ocena = "<ul class='list-group'><li class='list-group-item list-group-item-danger'>Vas ITM je prenizek. <b class='text-right'>Kategorija: Zmerna nedohranjenost</b></li></ul>";itm_stopnja=1;}
@@ -550,9 +561,6 @@ var izracunStatistike = function(rojstvo,visine,teze,datumi,prehrana,dolzina_pod
 	else if(ITM_od_zadnje_spremembe<40.0){ocena = "<ul class='list-group'><li class='list-group-item list-group-item-danger'>Vas ITM je previsok. <b class='text-right'>Kategorija: Debelost stopnje II</b></li></ul>";itm_stopnja=6;}
 	else if(ITM_od_zadnje_spremembe>=40.0){ocena = "<ul class='list-group'><li class='list-group-item list-group-item-danger'>Vas ITM je ogrozujoce visok. <b class='text-right'>Kategorija: Debelost stopnje III</b></li></ul>";itm_stopnja=7;}
 
-	//IZRACUN STAROSTI
-	itm_seje=ITM_od_zadnje_spremembe;
-	
 	//KLIC TWITERJA
 	twitterPrikaz(prehrana,itm_stopnja);
 	
@@ -574,10 +582,7 @@ var izracunStatistike = function(rojstvo,visine,teze,datumi,prehrana,dolzina_pod
 	
 	//rezlika v kilogramih od prve meritve
 	kg_od_prve_meritve= (teze[0])-teze[dolzina_podatkov-1];
-	if(kg_od_prve_meritve<0){
-		//pridobljeni kilogrami - oceni z rdece
-	}
-	
+
 	//sprozi prikaz statistike
 	$("#rezultatStatistike").html("");
 	
@@ -598,31 +603,61 @@ var izracunStatistike = function(rojstvo,visine,teze,datumi,prehrana,dolzina_pod
 }
 
 var twitterPrikaz = function(prehrana,itm){
-	console.log("klic twiterja");
-	//ce je itm uredu- nekaj za ohranjanje...
-	var parametri="#vegan";
+	var twiter="";
+	if(prehrana=="meso"){
+		if(itm<=2){
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23weightgain%20%23nutrition" data-widget-id="738018156715900928">Tweets about #weightgain #nutrition</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+		}
+		else if(itm==3){
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23StayFit%20%23EatHealthy" data-widget-id="738002222705987585">Tweets about #StayFit #EatHealthy</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+		}
+		else{
+			twiter='<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=%23weightloss%20%23diet%20" data-widget-id="738002769882255360">Tweets about #weightloss #diet </a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+		}
+	}
+	else if(prehrana=="vegi"){
+		if(itm<=2){
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegetarian%20%23fit" data-widget-id="738003763521327104">Tweets about #vegetarian #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+		}
+		else if(itm==3){
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegetarian%20%23fit" data-widget-id="738003763521327104">Tweets about #vegetarian #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+		}
+		else{
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegetarian%20%23diet" data-widget-id="738004184428126209">Tweets about #vegetarian #diet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+		}
+	} 
+	else if(prehrana=="vegan"){
+		if(itm<=2){
+			console.log("v prvem");
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegan%20%23fit" data-widget-id="738004490083807232">Tweets about #vegan #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+		}
+		else if(itm==3){
+			console.log("v drugem");
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegan%20%23fit" data-widget-id="738004490083807232">Tweets about #vegan #fit</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+		}
+		else{
+			twiter='<a class="twitter-timeline"  href="https://twitter.com/search?q=%23vegan%20%23diet" data-widget-id="738005163559014400">Tweets about #vegan #diet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+		}
+	}
 
-
-
-	var twiter = "<a class='twitter-timeline' data-dnt='true' href='https://twitter.com/search?q=%23vegan%20%23food%20%23healthy' data-widget-id='737662572871200768'>Tweets about #vegan#food#healthy</a>\
-									<script>\
-										!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';\
-											if(!d.getElementById(id))\
-												{\
-													js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);\
-												}\
-										}\
-										(document,'script','twitter-wjs');\
-										</script>";
 	$("#twitter").html("");
-	
-	
-	
+
 	$("#twitter").append(twiter); 
 	
 }
 
-var generirajPodatke=function(zahteva){
+var generirajPodatke = function(){
+	
+	$("#preberiEhrIdZaVitalneZnake").html("");
+	$("#preberiEhrIdZaVitalneZnake").append("<option value=''></option>");
+
+	
+	generirajPodatkeFunkcija(1);
+	generirajPodatkeFunkcija(2);
+	generirajPodatkeFunkcija(3);
+}
+
+var generirajPodatkeFunkcija=function(zahteva){
 	console.log("TUKAJ BOM GENERIRAL");
 	
 	var ehr_id="";
@@ -630,49 +665,45 @@ var generirajPodatke=function(zahteva){
 	var priimek="";
 	var rojstvo="";
 	var prehrana="";
-	var teze[];
-	var visine[];
-	var datumi[];
-	
+	var teze=[];
+	var visine=[];
+	var datumi=[];
+	var spol="";
 	
 	if(zahteva==1){
 		ime="Bojan";
 		priimek="Novak";
 		rojstvo="1981-10-30T14:58";
 		prehrana="vegi";
-		teze=[101,101.5,101.2.100,99,98,99];
-		visine=[185,185,185.1,185.1,185.2,185,2,185.2];
-		datumi=["1981-10-30T14:58,"1981-10-30T14:58,"1981-10-30T14:58,"2014-11-03T14:58","2015-02-03T14:58","2015-01-01T14:58"];
-		
+		spol="MALE";
+		teze=[101,99,96.2,93,91.4,89,86];
+		visine=[185,185,185.1,185.1,185.2,185.2,185.2];
+		datumi=["2015-01-04T14:58","2015-02-08T14:58","2015-03-02T14:58","2015-04-11T14:58","2015-05-12T14:58","2015-06-03T14:58","2015-07-07T14:58"];
 	}
 	else if(zahteva==2){
-		
+		ime="Vanesa";
+		priimek="Skof";
+		rojstvo="1996-08-05T14:58";
+		prehrana="vegan";
+		spol="FEMALE";
+		teze=[64,65.5,64,66,66,65,67];
+		visine=[175,175,175.1,175.1,175.2,175.2,175.2];
+		datumi=["2015-01-04T14:58","2015-02-08T14:58","2015-03-02T14:58","2015-04-11T14:58","2015-05-12T14:58","2015-06-03T14:58","2015-07-07T14:58"];
 	}
 	else if(zahteva==3){
-		
+		ime="Bojan";
+		priimek="Novak";
+		rojstvo="1981-10-30T14:58";
+		prehrana="vegi";
+		spol="MALE";
+		teze=[101,101.5,101.2,100,99,98,99];
+		visine=[185,185,185.1,185.1,185.2,185.2,185.2];
+		datumi=["1981-10-30T14:58","1981-10-30T14:58","1981-10-30T14:58","2014-11-03T14:58","2015-02-03T14:58","2015-01-01T14:58"];
 	}
-	
-	//var ehr_prvi=$("#preberiEHRid").val();
-	
-	var teze_bojan=["1","2","3","4","5"];
-	var datumi_bojan=["1938-11-30T14:58","1938-10-20T14:58","1918-10-30T14:58","1138-10-30T14:58","2938-10-30T14:58"];
-	var visine_bojan=["10","11","12","13","14"];
-	//var ehr_prvi=ustvariBolnika("Bojan","Novak","MALE","vegi","1981-2-10",datumi_bojan,visine_bojan,teze_bojan,12);
-	//console.log("bojan: "+ehr_prvi);
-	//dodajMeritve("d93ab36d-1ef1-4635-851b-16ff9708c9ff",datumi_bojan,visine_bojan,teze_bojan);
-	
-	for(var i = 0; i < 5; i++){
-		dodajMeritve("d018bafb-9df4-4d9d-852b-390ccac6d41f",datumi_bojan[i],visine_bojan[i],teze_bojan[i]);
-	}
-
-	//console.log("bojan: "+ehr_prvi);
-	//ustvariBolnika(ime,priimek,spol,prehrana,datum);
-	//ustvariBolnika(ime,priimek,spol,prehrana,datum);
-	
+	ustvariBolnika(ime,priimek,spol,prehrana,rojstvo,datumi,visine,teze);
 }
 
-var ustvariBolnika=function(ime,priimek,spol,prehrana,datum,datumInUra,telesnaVisina,telesnaTeza,dolzina_podatkov){
-	var vrni_ehr;
+var ustvariBolnika=function(ime,priimek,spol,prehrana,datum,datumInUra,telesnaVisina,telesnaTeza){
 	sessionId = getSessionId();
 	$.ajaxSetup({
 		    headers: {"Ehr-Session": sessionId}
@@ -682,14 +713,13 @@ var ustvariBolnika=function(ime,priimek,spol,prehrana,datum,datumInUra,telesnaVi
 		    type: 'POST',
 		    success: function (data) {
 		        var ehrId = data.ehrId;
-		        vrni_ehr=ehrId;
 		        console.log("moj EHR: "+ehrId);
 		        var partyData = {
 		        	gender:spol,
 		            firstNames: ime,
 		            lastNames: priimek,
 		            dateOfBirth: datum,
-		            partyAdditionalInfo: [{key: "ehrId", value: ehrId},{key: "prehrana", value: prehrana}]
+		            partyAdditionalInfo:[{key: "ehrId", value: ehrId},{key: "prehrana", value: prehrana}]
 		        };
 		        $.ajax({
 		            url: baseUrl + "/demographics/party",
@@ -705,48 +735,18 @@ var ustvariBolnika=function(ime,priimek,spol,prehrana,datum,datumInUra,telesnaVi
 		                }
 		            },
 		        });
-		        
-		        console.log("prej: "+datumInUra[i]+telesnaVisina[i]+telesnaTeza[i]);
-		        for(var i=0; i < dolzina_podatkov;i++){
-		        	console.log("sem v zanki: "+datumInUra[i]+telesnaVisina[i]+telesnaTeza[i]);
-					var podatki = {
-					// Struktura predloge je na voljo na naslednjem spletnem naslovu:
-				    // https://rest.ehrscape.com/rest/v1/template/Vital%20Signs/example
-					    "ctx/language": "en",
-					    "ctx/territory": "SI",
-					    "ctx/time": datumInUra[i],
-					    "vital_signs/height_length/any_event/body_height_length": telesnaVisina[i],
-					    "vital_signs/body_weight/any_event/body_weight": telesnaTeza[i],
-					};
-					var parametriZahteve = {
-					    ehrId: ehrId,
-					    templateId: 'Vital Signs',
-					    format: 'FLAT',
-					};
-			
-					$.ajax({
-					    url: baseUrl + "/composition?" + $.param(parametriZahteve),
-					    type: 'POST',
-					    contentType: 'application/json',
-					    data: JSON.stringify(podatki),
-					    success: function (res) {},
-					    error: function(err) {}
-					});
-		        }
-		        
+		        for(var i = 0; i < telesnaVisina.length; i++){
+					dodajMeritve(ehrId,datumInUra[i],telesnaVisina[i],telesnaTeza[i]);
+				}
+				var dodaj_opcijo="<option value="+ehrId+">"+ime+" "+priimek+"</option>";
+				$("#preberiEhrIdZaVitalneZnake").append(dodaj_opcijo);
 		    }
 		    
 		});
-		console.log("ehr na koncu: "+response.ehrId );
-		return response.ehrId;
-	//console.log("ehr na koncu: "+vrni_ehr );
-	//return response.responseJSON.sessionId;
 }
 
 
 var dodajMeritve = function(ehrId,datumInUra,telesnaVisina,telesnaTeza){
-	//console.log("sem tu notri: "+datumInUra+telesnaVisina+telesnaTeza);
-	
 	sessionId = getSessionId();
 		$.ajaxSetup({
 		    headers: {"Ehr-Session": sessionId}
